@@ -117,53 +117,5 @@ public class TaskService {
         return tasks;
     }
     
-    
-    
-    
-    public ArrayList<Task> parsingJSON(String json){
-        
-        JSONParser jp = new JSONParser();
-        try {
-            Map<String, Object> tasksJson = jp.parseJSON(new CharArrayReader(json.toCharArray()));
-            ArrayList<Map<String,Object>> tasksObjects = (ArrayList<Map<String,Object>>) tasksJson.get("root");
-            
-            for (Map<String, Object> obj : tasksObjects) {
-                
-                Task t = new Task();
-                t.setId(Integer.parseInt(obj.get("id").toString()));
-                t.setStatus(Integer.parseInt(obj.get("status").toString()));
-                t.setName(obj.get("name").toString());
-                
-                tasks.add(t);
-            }
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        
-        
-        return tasks;
-    }
-    
-    
-    //..
-    
-    public ArrayList<Task> getAllTasks(){
-        
-        String url = Statics.BASE_URL+"/tasks/";
-        ConnectionRequest q = new ConnectionRequest(url);
-        q.setPost(false);
-        q.addResponseListener(new ActionListener<NetworkEvent>() {
-            @Override
-            public void actionPerformed(NetworkEvent evt) {
-                tasks = parseJSONAction(new String(q.getResponseData()));
-                q.removeResponseListener(this);
-            }
-        });
-        
-        NetworkManager.getInstance().addToQueueAndWait(q);
-        return tasks;
-    }
-    
-    
+
 }
